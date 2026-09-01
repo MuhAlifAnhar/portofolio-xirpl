@@ -8,7 +8,7 @@ dotenv.config();
 
 // 3. Inisialisasi aplikasi Express
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // 4. Middleware dasar
 app.use(cors()); // Mengizinkan request dari domain lain (Frontend)
