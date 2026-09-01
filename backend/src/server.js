@@ -33,6 +33,18 @@ app.get('/api/status', (req, res) => {
     });
 });
 
+app.get('/api/biodata', (req, res) => {
+    res.status(200).json({
+        success: true,
+        data: {
+            nama: 'Muh. Alif Anhar',
+            kelas: 'XI Backend',
+            cita_cita: 'Backend Developer',
+            hobi: 'Moshing'
+        },
+    });
+})
+
 // 6. Middleware untuk menangani route yang tidak ditemukan (404 Not Found)
 app.use((req, res) => {
     res.status(404).json({
