@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Pertemuan 02 - Pemrograman Web Backend Express.js</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+        :root {
+            --primary: #1e40af;
+            --primary-light: #eff6ff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --card-bg: #f8fafc;
+            --success: #16a34a;
+            --warning: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.65;
+            background-color: #f1f5f9;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* HEADER KOP */
+        .doc-header {
+            border-bottom: 3px double var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title h2 {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .badge-meeting {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* METADATA GRID */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .meta-item span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .meta-item strong {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        /* TYPOGRAPHY */
+        h2.section-title {
+            font-size: 1.25rem;
+            color: var(--primary);
+            border-left: 5px solid var(--primary);
+            padding-left: 0.75rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h3.step-title {
+            font-size: 1.05rem;
+            color: #0f172a;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* CODE BLOCKS */
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin: 0.75rem 0 1.25rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* CALLOUT BOX */
+        .callout {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+        }
+
+        .callout strong {
+            color: var(--primary);
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--card-bg);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* WORKSHEET FORM */
+        .lks-card {
+            border: 2px dashed var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: #ffffff;
+            margin-top: 1.5rem;
+        }
+
+        .lks-field {
+            margin-bottom: 1rem;
+        }
+
+        .lks-field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER KOP MODUL -->
+    <div class="doc-header">
+        <div class="header-title">
+            <h1>Modul Ajar Praktikum</h1>
+            <h2>Pemrograman Web & Perangkat Bergerak (PWPB)</h2>
+        </div>
+        <div class="badge-meeting">
+            PERTEMUAN 02<br>
+            <small style="font-weight: 400; opacity: 0.9;">12 Pertemuan Total</small>
+        </div>
+    </div>
+
+    <!-- METADATA PROYEK -->
+    <div class="meta-grid">
+        <div class="meta-item">
+            <span>Mata Pelajaran</span>
+            <strong>Pemrograman Backend</strong>
+        </div>
+        <div class="meta-item">
+            <span>Proyek</span>
+            <strong>Web Portofolio Dinamis</strong>
+        </div>
+        <div class="meta-item">
+            <span>Teknologi</span>
+            <strong>Express.js, Node.js, MySQL</strong>
+        </div>
+        <div class="meta-item">
+            <span>Sasaran</span>
+            <strong>Kelas XI / XII RPL</strong>
+        </div>
+    </div>
+
+    <!-- BAGIAN 1: IDENTITAS & TUJUAN -->
+    <h2 class="section-title">A. Identitas & Tujuan Pembelajaran</h2>
+    <p>Setelah mengikuti pembelajaran pada modul ini, siswa diharapkan mampu:</p>
+    <ul>
+        <li>Memahami konsep arsitektur <strong>Client-Server</strong> dan siklus <strong>Request-Response</strong>.</li>
+        <li>Menginstal serta mengonfigurasi dependensi pendukung (<code>dotenv</code>, <code>cors</code>, dan <code>nodemon</code>).</li>
+        <li>Menyimpan variabel lingkungan port pada file <code>.env</code> secara terpisah dan aman.</li>
+        <li>Menulis kode web server HTTP pertama menggunakan framework <strong>Express.js</strong> pada <code>src/server.js</code>.</li>
+        <li>Membuat endpoint routing <code>GET</code> dengan respon standar <strong>JSON</strong>.</li>
+        <li>Menangani rute yang tidak terdaftar melalui error handler <code>404 Not Found</code>.</li>
+        <li>Menguji endpoint API menggunakan browser dan aplikasi Postman / Thunder Client.</li>
+    </ul>
+
+    <!-- BAGIAN 2: SILABUS 12 PERTEMUAN -->
+    <h2 class="section-title">B. Peta Kurikulum Proyek (12 Pertemuan)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 15%;">Pertemuan</th>
+                <th style="width: 20%;">Fokus</th>
+                <th>Topik Pembelajaran</th>
+                <th style="width: 25%;">Target Luaran</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;"><strong>01</strong></td>
+                <td>Backend & Frontend</td>
+                <td>Setup Node.js, Next.js, & Struktur Folder Proyek</td>
+                <td>Folder Proyek Siap (Selesai)</td>
+            </tr>
+            <tr style="background: var(--primary-light);">
+                <td style="text-align: center;"><strong>02</strong></td>
+                <td><strong>Backend</strong></td>
+                <td><strong>Dasar Express.js, Variabel .env, Routing, & JSON Respon</strong></td>
+                <td><strong>Server Aktif & Endpoint Test</strong></td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>03</strong></td>
+                <td>Backend</td>
+                <td>Perancangan Database MySQL (<code>db_portofolio</code>) & Skema Tabel</td>
+                <td>Tabel MySQL Terbuat</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>04</strong></td>
+                <td>Backend</td>
+                <td>Koneksi Database Pool (<code>mysql2</code>), Helper DB & Pola MVC</td>
+                <td>Koneksi DB Aktif</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>05</strong></td>
+                <td>Backend</td>
+                <td>CRUD Modul 1: Profil Diri (About Me / Biodata)</td>
+                <td>Endpoint Profil Selesai</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>06</strong></td>
+                <td>Backend</td>
+                <td>CRUD Modul 2: Proyek / Portofolio Showcase</td>
+                <td>Endpoint Projects Selesai</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>07</strong></td>
+                <td>Backend</td>
+                <td>CRUD Modul 3: Keahlian (Skills) & Pengalaman (Experiences)</td>
+                <td>Endpoint Skills Selesai</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>08</strong></td>
+                <td>Backend</td>
+                <td>Upload File / Gambar Menggunakan <code>Multer</code></td>
+                <td>Upload Media Berfungsi</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>09</strong></td>
+                <td>Backend</td>
+                <td>Modul Kontak (Pesan Masuk), Validasi Input, & Middleware Handler</td>
+                <td>Endpoint Contact Selesai</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>10</strong></td>
+                <td>Backend</td>
+                <td>Autentikasi Admin: Hashing Password (<code>bcrypt</code>) & Token (<code>JWT</code>)</td>
+                <td>Sistem Login Terproteksi</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>11</strong></td>
+                <td>Backend</td>
+                <td>CORS Policy, Dokumentasi Endpoint API, & Pengujian Total Backend</td>
+                <td>Backend Selesai 100%</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;"><strong>12</strong></td>
+                <td>Frontend</td>
+                <td>Integrasi Frontend Next.js: Fetching Data API ke Tampilan UI Portofolio</td>
+                <td>Web Portofolio Dinamis Live</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <!-- BAGIAN 3: LANGKAH KERJA PRAKTIKUM -->
+    <h2 class="section-title">C. Langkah Kerja Praktikum (Step-by-Step)</h2>
+
+    <h3 class="step-title">Langkah 1: Membuka Folder Backend di Terminal</h3>
+    <p>Pastikan terminal VS Code aktif dan mengarah ke dalam folder <code>backend</code>:</p>
+    <pre><code>cd backend</code></pre>
+
+    <h3 class="step-title">Langkah 2: Menginstal Paket Dependensi</h3>
+    <p>Jalankan perintah berikut untuk mengunduh pustaka pembantu:</p>
+    <pre><code>npm install dotenv cors
+npm install -D nodemon</code></pre>
+    <div class="callout">
+        <strong>💡 Penjelasan Paket:</strong><br>
+        • <code>dotenv</code>: Membaca file konfigurasi <code>.env</code>.<br>
+        • <code>cors</code>: Membuka izin agar backend dapat diakses oleh frontend Next.js.<br>
+        • <code>nodemon</code>: Me-restart server secara otomatis setiap kali file disimpan.
+    </div>
+
+    <h3 class="step-title">Langkah 3: Konfigurasi Script di <code>package.json</code></h3>
+    <p>Buka file <code>backend/package.json</code> dan tambahkan script <code>dev</code> dan <code>start</code>:</p>
+    <pre><code>{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}</code></pre>
+
+    <h3 class="step-title">Langkah 4: Membuat File Konfigurasi <code>.env</code></h3>
+    <p>Buat file baru bernama <code>.env</code> di dalam folder <code>backend/</code> (sejajar dengan <code>package.json</code>):</p>
+    <pre><code># Konfigurasi Server
+PORT=5000
+NODE_ENV=development</code></pre>
+
+    <h3 class="step-title">Langkah 5: Menulis Kode Server di <code>src/server.js</code></h3>
+    <p>Buka file <code>backend/src/server.js</code> lalu ketikkan kode lengkap berikut:</p>
+    <pre><code>// 1. IMPORT MODUL
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+
+// 2. LOAD KONFIGURASI .ENV
+dotenv.config();
+
+// 3. INISIALISASI EXPRESS & PORT
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// 4. MIDDLEWARE DASAR
+app.use(cors()); 
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
+
+// 5. ENDPOINT DASAR
+// Route Utama (Root)
+app.get('/', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'Selamat datang di API Portofolio Dinamis!',
+        version: '1.0.0'
+    });
+});
+
+// Route Cek Status Server
+app.get('/api/status', (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: 'Server dalam keadaan sehat dan aktif.',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// 6. PENANGANAN 404 NOT FOUND
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Endpoint tidak ditemukan!'
+    });
+});
+
+// 7. MENJALANKAN SERVER
+app.listen(PORT, () => {
+    console.log(`========================================`);
+    console.log(`🚀 Server berjalan di: http://localhost:${PORT}`);
+    console.log(`📡 Mode: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`========================================`);
+});</code></pre>
+
+    <div class="page-break"></div>
+
+    <!-- BAGIAN 4: BEDAH KODE -->
+    <h2 class="section-title">D. Tabel Bedah Kode (Penjelasan Teknis)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 35%;">Sintaks Kode</th>
+                <th>Fungsi & Makna Teknis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>const app = express()</code></td>
+                <td>Membuat instance utama aplikasi Express sebagai penampung routing dan middleware.</td>
+            </tr>
+            <tr>
+                <td><code>dotenv.config()</code></td>
+                <td>Membaca file <code>.env</code> dan memasukkan nilainya ke <code>process.env</code>.</td>
+            </tr>
+            <tr>
+                <td><code>app.use(cors())</code></td>
+                <td>Middleware keamanan yang mengizinkan request lintas domain (CORS).</td>
+            </tr>
+            <tr>
+                <td><code>app.use(express.json())</code></td>
+                <td>Body-parser bawaan Express untuk mengenali data bertipe JSON dari request klien.</td>
+            </tr>
+            <tr>
+                <td><code>app.get(path, handler)</code></td>
+                <td>Mendaftarkan rute dengan method HTTP <code>GET</code>.</td>
+            </tr>
+            <tr>
+                <td><code>res.status(200).json(...)</code></td>
+                <td>Mengirim status code 200 (Success) beserta data berformat JSON ke klien.</td>
+            </tr>
+            <tr>
+                <td><code>app.use((req, res) => {...})</code></td>
+                <td>Handler fallback untuk menangani request ke endpoint yang tidak terdaftar (404).</td>
+            </tr>
+            <tr>
+                <td><code>app.listen(PORT, callback)</code></td>
+                <td>Menginstruksikan server untuk mulai mendengarkan koneksi pada nomor port tertentu.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- BAGIAN 5: PENGUJIAN -->
+    <h2 class="section-title">E. Pengujian Endpoint API</h2>
+    <p>Jalankan server pengembangan di terminal:</p>
+    <pre><code>npm run dev</code></pre>
+    
+    <p>Buka Web Browser atau Thunder Client / Postman, lalu akses URL berikut:</p>
+    <ul>
+        <li><code>http://localhost:5000/</code> $\rightarrow$ Status 200 OK (Pesan Sambutan).</li>
+        <li><code>http://localhost:5000/api/status</code> $\rightarrow$ Status 200 OK (Jam Server).</li>
+        <li><code>http://localhost:5000/api/random</code> $\rightarrow$ Status 404 (Endpoint tidak ditemukan).</li>
+    </ul>
+
+    <!-- BAGIAN 6: LEMBAR KERJA SISWA -->
+    <h2 class="section-title">F. Lembar Kerja Siswa (Tugas Praktik)</h2>
+    <div class="lks-card">
+        <div style="display: flex; gap: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <div><strong>Nama Siswa:</strong> ............................................................</div>
+            <div><strong>Kelas:</strong> XI RPL 1</div>
+        </div>
+
+        <p><strong>Instruksi Praktik:</strong></p>
+        <ol>
+            <li>Tambahkan route baru di <code>src/server.js</code> dengan method <code>GET</code> dan path <code>/api/biodata</code>.</li>
+            <li>Kembalikan objek JSON dengan format data diri siswa (nama, kelas, cita-cita, keahlian).</li>
+            <li>Ubah <code>PORT=8000</code> di file <code>.env</code> dan buktikan bahwa server berjalan di port baru.</li>
+        </ol>
+    </div>
+
+    <!-- BAGIAN 7: TROUBLESHOOTING -->
+    <h2 class="section-title">G. Panduan Troubleshooting</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 40%;">Pesan Error</th>
+                <th>Penyebab & Solusi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>EADDRINUSE :::5000</code></td>
+                <td>Port 5000 sedang terpakai. Matikan server lama dengan <code>Ctrl + C</code> atau ubah port di <code>.env</code> menjadi <code>5001</code>.</td>
+            </tr>
+            <tr>
+                <td><code>Cannot find module 'express'</code></td>
+                <td>Folder kerja salah. Pastikan berada di folder <code>backend</code> lalu jalankan <code>npm install</code>.</td>
+            </tr>
+            <tr>
+                <td>Script disabled on PowerShell</td>
+                <td>Gunakan Command Prompt (cmd) atau jalankan dengan <code>npx nodemon src/server.js</code>.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
