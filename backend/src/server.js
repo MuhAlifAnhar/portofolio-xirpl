@@ -6,6 +6,9 @@ const cors = require('cors');
 // 2. Load file konfigurasi .env
 dotenv.config();
 
+// Load koneksi database
+const db = require('./config/db');
+
 // 3. Inisialisasi aplikasi Express
 const app = express();
 const PORT = process.env.PORT;

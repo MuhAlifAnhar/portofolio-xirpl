@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Pertemuan 04 - Koneksi Database & MVC</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --primary-light: #f5f3ff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --card-bg: #f8fafc;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.65;
+            background-color: #f1f5f9;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .doc-header {
+            border-bottom: 3px double var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title h2 {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .badge-meeting {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .meta-item span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .meta-item strong {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        h2.section-title {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            border-left: 5px solid var(--primary);
+            padding-left: 0.75rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h3.step-title {
+            font-size: 1.05rem;
+            color: #0f172a;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            margin: 0.75rem 0 1.25rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .callout {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+        }
+
+        .callout strong {
+            color: var(--primary-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--card-bg);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        .lks-card {
+            border: 2px dashed var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: #ffffff;
+            margin-top: 1.5rem;
+        }
+
+        @media print {
+            body { background: #ffffff; padding: 0; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="doc-header">
+        <div class="header-title">
+            <h1>Modul Ajar Praktikum</h1>
+            <h2>Pemrograman Web & Perangkat Bergerak (PWPB)</h2>
+        </div>
+        <div class="badge-meeting">
+            PERTEMUAN 04<br>
+            <small style="font-weight: 400; opacity: 0.9;">12 Pertemuan Total</small>
+        </div>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item">
+            <span>Mata Pelajaran</span>
+            <strong>Pemrograman Backend</strong>
+        </div>
+        <div class="meta-item">
+            <span>Topik Bahasan</span>
+            <strong>Koneksi Database & MVC</strong>
+        </div>
+        <div class="meta-item">
+            <span>Teknologi</span>
+            <strong>Node.js, mysql2, dotenv</strong>
+        </div>
+        <div class="meta-item">
+            <span>Sasaran</span>
+            <strong>Kelas XI / XII RPL</strong>
+        </div>
+    </div>
+
+    <h2 class="section-title">A. Tujuan Pembelajaran Khusus (TP)</h2>
+    <ul>
+        <li>Memahami konsep Arsitektur MVC (Model-View-Controller) dalam pengembangan Backend API.</li>
+        <li>Menginstal pustaka <code>mysql2</code> sebagai perantara (driver) ke database MySQL.</li>
+        <li>Memperbarui konfigurasi kredensial koneksi di dalam file <code>.env</code>.</li>
+        <li>Membuat file <code>config/db.js</code> yang mengimplementasikan <strong>Connection Pool</strong>.</li>
+        <li>Menguji coba agar server dan database saling terhubung dengan sukses (✅).</li>
+    </ul>
+
+    <h2 class="section-title">B. Landasan Teori Singkat</h2>
+    <h3>1. Apa itu Arsitektur MVC?</h3>
+    <p>MVC (Model-View-Controller) adalah pola penataan folder dan logika aplikasi. <strong>Model</strong> khusus mengatur database, <strong>View</strong> mengatur tampilan halaman, dan <strong>Controller</strong> menjadi otak pengatur antara Model dan View.</p>
+    
+    <h3>2. Connection Pool vs Koneksi Biasa</h3>
+    <p>Daripada membuat koneksi baru dari nol setiap ada permintaan klien, <strong>Connection Pool</strong> menyediakan sekumpulan "koneksi siap pakai". Saat tugas selesai, koneksi dikembalikan ke dalam kolam (*pool*). Hasilnya, respon server lebih cepat dan efisien!</p>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">C. Langkah Kerja Praktikum (Step-by-Step)</h2>
+
+    <h3 class="step-title">Langkah 1: Instalasi Paket <code>mysql2</code></h3>
+    <p>Buka terminal di dalam folder <code>backend</code>, jalankan perintah:</p>
+    <pre><code>npm install mysql2</code></pre>
+    <div class="callout">
+        <strong>💡 Penjelasan:</strong> Modul <code>mysql2</code> lebih disarankan daripada modul lawas <code>mysql</code> karena mendukung fitur modern seperti <em>Promises</em> (async/await).
+    </div>
+
+    <h3 class="step-title">Langkah 2: Menambahkan Konfigurasi di File <code>.env</code></h3>
+    <p>Buka file <code>backend/src/.env</code>, tambahkan bagian Database MySQL:</p>
+    <pre><code># Konfigurasi Server
+PORT=5000
+NODE_ENV=development
+
+# Konfigurasi Database MySQL
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=db_portofolio</code></pre>
+    <p><em>(Catatan: Jika MySQL di komputer Anda memiliki password, silakan diisi pada baris DB_PASSWORD)</em></p>
+
+    <h3 class="step-title">Langkah 3: Membuat File Koneksi Database <code>db.js</code></h3>
+    <p>Buat file baru di direktori <code>backend/src/config/db.js</code> dan isi kode berikut:</p>
+    <pre><code>// 1. Import library mysql2 dan dotenv
+const mysql = require('mysql2');
+require('dotenv').config();
+
+// 2. Membuat connection pool
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// 3. Menggunakan promise wrapper (async/await support)
+const db = pool.promise();
+
+// 4. Mengetes koneksi ke database saat file ini dipanggil
+pool.getConnection((err, connection) => {
+    if (err) {
+        console.error('❌ Kesalahan Koneksi Database:', err.message);
+    } else {
+        console.log('✅ Berhasil terhubung ke Database MySQL (db_portofolio)');
+        connection.release();
+    }
+});
+
+// 5. Export module agar bisa digunakan di controller/model
+module.exports = db;</code></pre>
+
+    <h3 class="step-title">Langkah 4: Memanggil Koneksi di <code>server.js</code></h3>
+    <p>Buka <code>backend/src/server.js</code>, dan tambahkan pemanggilan database tepat di bawah <code>dotenv.config();</code>.</p>
+    <pre><code>// 2. Load file konfigurasi .env
+dotenv.config();
+
+// Tambahkan baris ini untuk memanggil koneksi database
+const db = require('./config/db');
+
+// 3. Inisialisasi aplikasi Express
+const app = express();
+// ... dst ...</code></pre>
+
+    <h3 class="step-title">Langkah 5: Pengujian (Testing)</h3>
+    <p>Pastikan modul MySQL di XAMPP hidup. Jalankan server dengan perintah:</p>
+    <pre><code>npm run dev</code></pre>
+    <p><strong>Cek Terminal:</strong> Jika terhubung, akan muncul tulisan <code>✅ Berhasil terhubung ke Database MySQL (db_portofolio)</code>.</p>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">D. Lembar Kerja Siswa (LKS) & Troubleshooting</h2>
+    <div class="lks-card">
+        <div style="display: flex; gap: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <div><strong>Nama Siswa:</strong> ............................................................</div>
+            <div><strong>Kelas:</strong> XI RPL 1</div>
+        </div>
+
+        <p><strong>Lakukan Eksperimen Troubleshooting berikut dan catat hasilnya:</strong></p>
+        <ol>
+            <li style="margin-bottom: 1rem;">
+                <strong>Eksperimen 1:</strong> Matikan (Stop) MySQL di XAMPP. Amati terminal VS Code. <br>
+                <em>Pesan error apa yang muncul? Jelaskan alasannya!</em> <br><br>
+                Jawab: ............................................................................................................ <br>
+                ........................................................................................................................
+            </li>
+            <li>
+                <strong>Eksperimen 2:</strong> Hidupkan lagi MySQL. Ubah <code>DB_PASSWORD=rahasia</code> di <code>.env</code> (Padahal harusnya kosong). <br>
+                <em>Pesan error apa yang muncul? Jelaskan alasannya!</em> <br><br>
+                Jawab: ............................................................................................................ <br>
+                ........................................................................................................................
+            </li>
+        </ol>
+    </div>
+
+</div>
+
+</body>
+</html>

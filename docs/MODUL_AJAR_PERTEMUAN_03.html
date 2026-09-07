@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Pertemuan 03 - Perancangan Database MySQL & Skema Tabel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #f0f9ff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --card-bg: #f8fafc;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            line-height: 1.65;
+            background-color: #f1f5f9;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* HEADER */
+        .doc-header {
+            border-bottom: 3px double var(--border);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title h2 {
+            font-size: 1.1rem;
+            color: var(--text);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .badge-meeting {
+            background: var(--primary);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* METADATA GRID */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 1.25rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .meta-item span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .meta-item strong {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+
+        /* TYPOGRAPHY */
+        h2.section-title {
+            font-size: 1.25rem;
+            color: var(--primary-dark);
+            border-left: 5px solid var(--primary);
+            padding-left: 0.75rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h3.step-title {
+            font-size: 1.05rem;
+            color: #0f172a;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* CODE BLOCKS */
+        pre {
+            background: var(--code-bg);
+            color: #e2e8f0;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.86rem;
+            line-height: 1.5;
+            margin: 0.75rem 0 1.25rem;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            background: #e2e8f0;
+            color: #0f172a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        /* CALLOUT BOX */
+        .callout {
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.92rem;
+        }
+
+        .callout strong {
+            color: var(--primary-dark);
+        }
+
+        /* TABLES */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--card-bg);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* DIAGRAM BOX */
+        .diagram-box {
+            background: #0f172a;
+            color: #38bdf8;
+            font-family: 'Fira Code', monospace;
+            padding: 1.25rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        /* WORKSHEET FORM */
+        .lks-card {
+            border: 2px dashed var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: #ffffff;
+            margin-top: 1.5rem;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body {
+                background: #ffffff;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER KOP MODUL -->
+    <div class="doc-header">
+        <div class="header-title">
+            <h1>Modul Ajar Praktikum</h1>
+            <h2>Pemrograman Web & Perangkat Bergerak (PWPB)</h2>
+        </div>
+        <div class="badge-meeting">
+            PERTEMUAN 03<br>
+            <small style="font-weight: 400; opacity: 0.9;">12 Pertemuan Total</small>
+        </div>
+    </div>
+
+    <!-- METADATA PROYEK -->
+    <div class="meta-grid">
+        <div class="meta-item">
+            <span>Mata Pelajaran</span>
+            <strong>Pemrograman Backend</strong>
+        </div>
+        <div class="meta-item">
+            <span>Topik Bahasan</span>
+            <strong>Database MySQL & Skema Tabel</strong>
+        </div>
+        <div class="meta-item">
+            <span>Teknologi</span>
+            <strong>MySQL / MariaDB & SQL DDL/DML</strong>
+        </div>
+        <div class="meta-item">
+            <span>Sasaran</span>
+            <strong>Kelas XI / XII RPL</strong>
+        </div>
+    </div>
+
+    <!-- BAGIAN 1: TUJUAN -->
+    <h2 class="section-title">A. Tujuan Pembelajaran</h2>
+    <p>Setelah mengikuti pembelajaran pada pertemuan ini, siswa diharapkan mampu:</p>
+    <ul>
+        <li>Memahami kebutuhan struktur data untuk aplikasi web portofolio dinamis.</li>
+        <li>Menjelaskan fungsi masing-masing tabel (<code>users</code>, <code>profile</code>, <code>skills</code>, <code>projects</code>, <code>experiences</code>, <code>messages</code>).</li>
+        <li>Menentukan tipe data SQL yang tepat (<code>INT AUTO_INCREMENT</code>, <code>VARCHAR</code>, <code>TEXT</code>, <code>ENUM</code>, <code>BOOLEAN</code>, <code>TIMESTAMP</code>).</li>
+        <li>Membuat database <code>db_portofolio</code> dan skema tabel menggunakan script SQL DDL.</li>
+        <li>Memasukkan data awal (<em>dummy/seed data</em>) menggunakan query <code>INSERT</code>.</li>
+        <li>Melakukan verifikasi data dengan perintah <code>SELECT</code> melalui phpMyAdmin atau MySQL Client.</li>
+    </ul>
+
+    <!-- BAGIAN 2: LANDASAN TEORI -->
+    <h2 class="section-title">B. Landasan Teori & Skema Relasional</h2>
+    <p>Di pertemuan sebelumnya (Pertemuan 2), data respon masih ditulis manual di kode JavaScript. Pada pertemuan ini, kita membuat database <strong>MySQL</strong> agar data portofolio tersimpan secara permanen dan dinamis.</p>
+
+    <div class="diagram-box">
++-------------------+        +-------------------+        +-------------------+
+|      profile      |        |      skills       |        |     projects      |
++-------------------+        +-------------------+        +-------------------+
+| id (PK)           |        | id (PK)           |        | id (PK)           |
+| name              |        | name              |        | title             |
+| role              |        | category (ENUM)   |        | description       |
+| bio, about        |        | level (INT)       |        | category          |
+| avatar_url        |        | icon              |        | image_url         |
+| email, phone      |        | created_at        |        | demo_url          |
+| github, linkedin  |        +-------------------+        | github_url        |
++-------------------+                                     | tech_stack        |
+                                                          | is_featured (BOOL)|
++-------------------+        +-------------------+        +-------------------+
+|    experiences    |        |     messages      |        |       users       |
++-------------------+        +-------------------+        +-------------------+
+| id (PK)           |        | id (PK)           |        | id (PK)           |
+| type (ENUM)       |        | sender_name       |        | username (UNIQUE) |
+| title, company    |        | sender_email      |        | email (UNIQUE)    |
+| start_date        |        | subject, message  |        | password (HASH)   |
+| is_current (BOOL) |        | is_read (BOOL)    |        | created_at        |
++-------------------+        +-------------------+        +-------------------+
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- BAGIAN 3: LANGKAH PRAKTIKUM -->
+    <h2 class="section-title">C. Langkah Kerja Praktikum (Step-by-Step)</h2>
+
+    <h3 class="step-title">Langkah 1: Menyalakan Service MySQL di XAMPP / Laragon</h3>
+    <p>Pastikan aplikasi <strong>XAMPP Control Panel</strong> sudah aktif dan service <strong>MySQL</strong> berjalan (berwarna hijau pada port 3306).</p>
+
+    <h3 class="step-title">Langkah 2: Membuka File Skema SQL</h3>
+    <p>Script SQL telah disediakan di folder proyek Anda pada: <code>backend/database/schema.sql</code>.</p>
+    
+    <pre><code>-- 1. MEMBUAT DATABASE
+CREATE DATABASE IF NOT EXISTS db_portofolio;
+USE db_portofolio;
+
+-- 2. TABEL USERS (ADMIN LOGIN)
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 3. TABEL PROFILE (BIODATA PEMILIK)
+CREATE TABLE IF NOT EXISTS profile (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    bio TEXT,
+    about TEXT,
+    avatar_url VARCHAR(255),
+    resume_url VARCHAR(255),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    github_url VARCHAR(255),
+    linkedin_url VARCHAR(255),
+    instagram_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 4. TABEL SKILLS (KEAHLIAN)
+CREATE TABLE IF NOT EXISTS skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    category ENUM('Frontend', 'Backend', 'Database', 'Tools', 'Other') DEFAULT 'Frontend',
+    level INT DEFAULT 80,
+    icon VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 5. TABEL PROJECTS (PROYEK / PORTOFOLIO)
+CREATE TABLE IF NOT EXISTS projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    description TEXT,
+    category VARCHAR(50) DEFAULT 'Web Development',
+    image_url VARCHAR(255),
+    demo_url VARCHAR(255),
+    github_url VARCHAR(255),
+    tech_stack VARCHAR(255),
+    is_featured BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 6. TABEL EXPERIENCES (PENGALAMAN KERJA / PENDIDIKAN)
+CREATE TABLE IF NOT EXISTS experiences (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('work', 'education', 'organization') DEFAULT 'work',
+    title VARCHAR(100) NOT NULL,
+    company VARCHAR(100) NOT NULL,
+    location VARCHAR(100),
+    start_date DATE,
+    end_date DATE,
+    is_current BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- 7. TABEL MESSAGES (PESAN KONTAK MASUK)
+CREATE TABLE IF NOT EXISTS messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_name VARCHAR(100) NOT NULL,
+    sender_email VARCHAR(100) NOT NULL,
+    subject VARCHAR(150),
+    message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+
+    <h3 class="step-title">Langkah 3: Mengeksekusi Query di phpMyAdmin</h3>
+    <ol>
+        <li>Buka browser ke alamat <code>http://localhost/phpmyadmin/</code>.</li>
+        <li>Klik tab <strong>SQL</strong>.</li>
+        <li>Salin seluruh kode dari file <code>backend/database/schema.sql</code>, lalu klik tombol <strong>Go / Kirim</strong>.</li>
+    </ol>
+
+    <h3 class="step-title">Langkah 4: Memasukkan Data Dummy Awal</h3>
+    <p>Jalankan query berikut agar tabel memiliki data awal untuk pengujian:</p>
+    <pre><code>-- Data Profil Siswa
+INSERT INTO profile (name, role, bio, about, email, phone, address, github_url, linkedin_url, instagram_url) 
+VALUES (
+    'Ahmad Fauzi',
+    'Junior Fullstack Web Developer',
+    'Siswa RPL yang antusias membangun backend Express.js dan frontend modern.',
+    'Halo! Saya seorang siswa SMK jurusan RPL dengan minat tinggi pada arsitektur REST API.',
+    'ahmad.fauzi@example.com',
+    '+6281234567890',
+    'Jakarta, Indonesia',
+    'https://github.com/ahmadfauzi',
+    'https://linkedin.com/in/ahmadfauzi',
+    'https://instagram.com/ahmadfauzi'
+);
+
+-- Data Skills
+INSERT INTO skills (name, category, level, icon) VALUES 
+('HTML5 & CSS3', 'Frontend', 90, 'html5'),
+('JavaScript (ES6+)', 'Frontend', 85, 'javascript'),
+('React / Next.js', 'Frontend', 75, 'react'),
+('Node.js & Express.js', 'Backend', 80, 'nodejs'),
+('MySQL', 'Database', 80, 'mysql'),
+('Git & GitHub', 'Tools', 85, 'git');</code></pre>
+
+    <!-- BAGIAN 4: LKS -->
+    <h2 class="section-title">D. Lembar Kerja Siswa (Tugas Praktik)</h2>
+    <div class="lks-card">
+        <div style="display: flex; gap: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+            <div><strong>Nama Siswa:</strong> ............................................................</div>
+            <div><strong>Kelas:</strong> XI RPL 1</div>
+        </div>
+
+        <p><strong>Instruksi Praktik:</strong></p>
+        <ol>
+            <li>Kustomisasi data profil pada tabel <code>profile</code> menggunakan query <code>UPDATE</code> sesuai nama dan data pribadi Anda.</li>
+            <li>Tambahkan 2 data keahlian baru di tabel <code>skills</code> dengan perintah <code>INSERT</code>.</li>
+            <li>Tuliskan query <code>SELECT</code> untuk menampilkan seluruh proyek yang memiliki nilai <code>is_featured = TRUE</code>.</li>
+        </ol>
+    </div>
+
+    <!-- BAGIAN 5: TROUBLESHOOTING -->
+    <h2 class="section-title">E. Troubleshooting</h2>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 35%;">Gejala Error</th>
+                <th>Solusi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>MySQL shutdown unexpectedly</code></td>
+                <td>Port 3306 bentrok. Matikan MySQL service bawaan di Windows <code>services.msc</code> atau ubah port XAMPP ke 3307.</td>
+            </tr>
+            <tr>
+                <td><code>Data truncated for column</code></td>
+                <td>Data yang diisi melebihi batas panjang karakter <code>VARCHAR(N)</code>.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>
