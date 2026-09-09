@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Pertemuan 05 - CRUD Modul Profil Diri (About Me)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --card-bg: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); line-height: 1.65; background: #f1f5f9; padding: 2rem 1rem; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
+        .doc-header { border-bottom: 3px double var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .header-title h1 { font-size: 1.5rem; color: var(--primary-dark); font-weight: 800; text-transform: uppercase; }
+        .header-title h2 { font-size: 1.1rem; color: var(--text); font-weight: 600; margin-top: 0.25rem; }
+        .badge-meeting { background: var(--primary); color: #fff; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-align: center; }
+        .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: var(--card-bg); padding: 1.25rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid var(--border); }
+        .meta-item span { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .meta-item strong { font-size: 0.95rem; color: var(--text); }
+        h2.section-title { font-size: 1.25rem; color: var(--primary-dark); border-left: 5px solid var(--primary); padding-left: 0.75rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 700; }
+        h3.step-title { font-size: 1.05rem; color: #0f172a; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        p, ul, ol { margin-bottom: 1rem; font-size: 0.95rem; }
+        ul, ol { padding-left: 1.5rem; }
+        li { margin-bottom: 0.35rem; }
+        pre { background: var(--code-bg); color: #e2e8f0; padding: 1rem 1.25rem; border-radius: 10px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.5; margin: 0.75rem 0 1.25rem; }
+        code { font-family: 'Fira Code', monospace; background: #e2e8f0; color: #0f172a; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        .callout { background: var(--primary-light); border-left: 4px solid var(--primary); padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; font-size: 0.92rem; }
+        .callout strong { color: var(--primary-dark); }
+        table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.9rem; }
+        th, td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+        th { background: var(--card-bg); font-weight: 700; }
+        tr:nth-child(even) { background-color: #fafafa; }
+        .diagram-box { background: #0f172a; color: #34d399; font-family: 'Fira Code', monospace; padding: 1.25rem; border-radius: 10px; font-size: 0.78rem; line-height: 1.4; overflow-x: auto; margin: 1rem 0; }
+        .lks-card { border: 2px dashed var(--border); padding: 1.5rem; border-radius: 12px; background: #fff; margin-top: 1.5rem; }
+        @media print { body { background: #fff; padding: 0; } .container { box-shadow: none; padding: 0; max-width: 100%; } .page-break { page-break-before: always; } }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="doc-header">
+        <div class="header-title">
+            <h1>Modul Ajar Praktikum</h1>
+            <h2>Pemrograman Web & Perangkat Bergerak (PWPB)</h2>
+        </div>
+        <div class="badge-meeting">PERTEMUAN 05<br><small style="font-weight:400;opacity:0.9;">12 Pertemuan Total</small></div>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item"><span>Mata Pelajaran</span><strong>Pemrograman Backend</strong></div>
+        <div class="meta-item"><span>Topik Bahasan</span><strong>CRUD 1: Modul Profil (About Me)</strong></div>
+        <div class="meta-item"><span>Pola Arsitektur</span><strong>MVC (Model-View-Controller)</strong></div>
+        <div class="meta-item"><span>Sasaran</span><strong>Kelas XI / XII RPL</strong></div>
+    </div>
+
+    <h2 class="section-title">A. Tujuan Pembelajaran</h2>
+    <ul>
+        <li>Menerapkan pola arsitektur <strong>MVC</strong> secara langsung dalam proyek Express.js.</li>
+        <li>Membuat file <strong>Model</strong> (query database), <strong>Controller</strong> (logika bisnis), dan <strong>Routes</strong> (endpoint URL).</li>
+        <li>Memahami penggunaan <code>async/await</code> dan blok <code>try...catch</code> untuk penanganan error.</li>
+        <li>Menguji endpoint <code>GET</code> (ambil data) dan <code>PUT</code> (perbarui data) menggunakan Postman/Thunder Client.</li>
+    </ul>
+
+    <h2 class="section-title">B. Alur Arsitektur MVC</h2>
+    <div class="diagram-box">
+[Client / Postman]
+      │
+      │  Request: GET /api/profile
+      ▼
+ ┌──────────┐     ┌────────────────────┐     ┌──────────────────┐
+ │  ROUTES   │ ──► │   CONTROLLER       │ ──► │     MODEL        │
+ │ (Alamat)  │     │ (Logika Bisnis)    │     │ (Query Database) │
+ └──────────┘     └────────────────────┘     └──────────────────┘
+                           │                         │
+                           │◄────── data profil ◄────┘
+                           │
+                           ▼
+                    Response: JSON { success, data }
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">C. Langkah Kerja Praktikum (Step-by-Step)</h2>
+
+    <h3 class="step-title">Langkah 1: Membuat Model Profil (<code>models/profileModel.js</code>)</h3>
+    <p>Model adalah file yang khusus mengurusi komunikasi langsung dengan database (query SQL).</p>
+    <pre><code>const db = require('../config/db');
+
+// 1. Mengambil data profil (hanya 1 baris)
+const getProfile = async () => {
+    const [rows] = await db.query('SELECT * FROM profile LIMIT 1');
+    return rows[0];
+};
+
+// 2. Memperbarui data profil berdasarkan ID
+const updateProfile = async (id, data) => {
+    const {
+        name, role, bio, about, avatar_url, resume_url,
+        email, phone, address, github_url, linkedin_url, instagram_url
+    } = data;
+
+    const [result] = await db.query(
+        `UPDATE profile SET 
+            name = ?, role = ?, bio = ?, about = ?, 
+            avatar_url = ?, resume_url = ?,
+            email = ?, phone = ?, address = ?, 
+            github_url = ?, linkedin_url = ?, instagram_url = ?
+        WHERE id = ?`,
+        [name, role, bio, about, avatar_url, resume_url,
+         email, phone, address, github_url, linkedin_url, instagram_url, id]
+    );
+    return result;
+};
+
+module.exports = { getProfile, updateProfile };</code></pre>
+    <div class="callout">
+        <strong>💡 Penjelasan:</strong> Tanda <code>?</code> dalam query SQL disebut <em>Parameterized Query</em>. Nilai variabel disisipkan secara terpisah agar aman dari serangan <strong>SQL Injection</strong>.
+    </div>
+
+    <h3 class="step-title">Langkah 2: Membuat Controller Profil (<code>controller/profileController.js</code>)</h3>
+    <p>Controller adalah "otak" yang menjembatani Request dari pengguna dan data dari Model.</p>
+    <pre><code>const profileModel = require('../models/profileModel');
+
+// 1. Controller: Mengambil data profil
+const getProfile = async (req, res) => {
+    try {
+        const profile = await profileModel.getProfile();
+
+        if (!profile) {
+            return res.status(404).json({
+                success: false,
+                message: 'Data profil belum tersedia.'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Berhasil mengambil data profil.',
+            data: profile
+        });
+    } catch (error) {
+        console.error('Error getProfile:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan pada server.',
+            error: error.message
+        });
+    }
+};
+
+// 2. Controller: Memperbarui data profil
+const updateProfile = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+
+        if (!data.name || !data.role) {
+            return res.status(400).json({
+                success: false,
+                message: 'Kolom "name" dan "role" wajib diisi!'
+            });
+        }
+
+        const result = await profileModel.updateProfile(id, data);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: `Profil dengan ID ${id} tidak ditemukan.`
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Data profil berhasil diperbarui.'
+        });
+    } catch (error) {
+        console.error('Error updateProfile:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan pada server.',
+            error: error.message
+        });
+    }
+};
+
+module.exports = { getProfile, updateProfile };</code></pre>
+
+    <h3 class="step-title">Langkah 3: Membuat Routes Profil (<code>routes/profileRoutes.js</code>)</h3>
+    <pre><code>const express = require('express');
+const router = express.Router();
+const profileController = require('../controller/profileController');
+
+// GET /api/profile
+router.get('/', profileController.getProfile);
+
+// PUT /api/profile/:id
+router.put('/:id', profileController.updateProfile);
+
+module.exports = router;</code></pre>
+
+    <h3 class="step-title">Langkah 4: Mendaftarkan Route di <code>server.js</code></h3>
+    <p>Tambahkan baris berikut <strong>di atas</strong> middleware 404:</p>
+    <pre><code>// ROUTES API
+const profileRoutes = require('./routes/profileRoutes');
+app.use('/api/profile', profileRoutes);
+
+// Middleware 404 (tetap di bawah)
+app.use((req, res) => { ... });</code></pre>
+
+    <h3 class="step-title">Langkah 5: Menjalankan & Menguji API</h3>
+    <pre><code>npm run dev</code></pre>
+    <p><strong>Uji GET:</strong> <code>GET http://localhost:5000/api/profile</code> → Data profil tampil.</p>
+    <p><strong>Uji PUT:</strong> <code>PUT http://localhost:5000/api/profile/1</code> → Kirim body JSON berisi data baru.</p>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">D. Lembar Kerja Siswa (LKS)</h2>
+    <div class="lks-card">
+        <div style="display:flex;gap:2rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:0.75rem;">
+            <div><strong>Nama Siswa:</strong> ............................................................</div>
+            <div><strong>Kelas:</strong> XI RPL 1</div>
+        </div>
+        <ol>
+            <li style="margin-bottom:1rem;"><strong>Tugas 1:</strong> Gunakan <code>PUT</code> untuk memperbarui profil menjadi data diri Anda sendiri. Sertakan screenshot response JSON!</li>
+            <li style="margin-bottom:1rem;"><strong>Tugas 2:</strong> Kirim request <code>PUT</code> tanpa field <code>name</code>. Tulis pesan error dan status code yang muncul!</li>
+            <li><strong>Tugas 3:</strong> Jelaskan mengapa di Model kita menggunakan tanda <code>?</code> (Parameterized Query) alih-alih menuliskan nilai langsung ke string SQL!</li>
+        </ol>
+    </div>
+
+    <h2 class="section-title">E. Rubrik Penilaian</h2>
+    <table>
+        <thead><tr><th>No</th><th>Aspek</th><th>Kriteria</th><th>Skor Maks</th></tr></thead>
+        <tbody>
+            <tr><td>1</td><td>Pembuatan Model</td><td>Query SQL benar, async/await diterapkan</td><td>20</td></tr>
+            <tr><td>2</td><td>Pembuatan Controller</td><td>try...catch, validasi, response JSON standar</td><td>20</td></tr>
+            <tr><td>3</td><td>Routes & Registrasi</td><td>Route terdaftar, endpoint GET dan PUT aktif</td><td>20</td></tr>
+            <tr><td>4</td><td>Pengujian API</td><td>Berhasil menguji GET & PUT di Postman</td><td>20</td></tr>
+            <tr><td>5</td><td>Tugas Mandiri</td><td>LKS & jawaban analisis lengkap</td><td>20</td></tr>
+            <tr><td colspan="3"><strong>TOTAL</strong></td><td><strong>100</strong></td></tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">F. Troubleshooting</h2>
+    <table>
+        <thead><tr><th>Error</th><th>Solusi</th></tr></thead>
+        <tbody>
+            <tr><td><code>Cannot find module '../config/db'</code></td><td>Periksa path import dan lokasi file <code>db.js</code> di <code>src/config/</code>.</td></tr>
+            <tr><td><code>req.body is undefined</code></td><td>Pastikan Postman diset ke Body JSON, dan <code>app.use(express.json())</code> ada di server.js.</td></tr>
+            <tr><td><code>affectedRows: 0</code></td><td>ID yang dikirim di URL tidak ada di database. Cek lewat GET dulu.</td></tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

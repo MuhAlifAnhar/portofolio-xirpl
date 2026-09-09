@@ -48,6 +48,12 @@ app.get('/api/biodata', (req, res) => {
     });
 })
 
+// ==========================================
+// ROUTES API (Mendaftarkan route dari folder routes/)
+// ==========================================
+const profileRoutes = require('./routes/profileRoutes');
+app.use('/api/profile', profileRoutes);
+
 // 6. Middleware untuk menangani route yang tidak ditemukan (404 Not Found)
 app.use((req, res) => {
     res.status(404).json({
