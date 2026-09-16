@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Pertemuan 06 - CRUD Modul Proyek</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+        :root {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --primary-light: #fffbeb;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --card-bg: #f8fafc;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); line-height: 1.65; background: #f1f5f9; padding: 2rem 1rem; }
+        .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 3rem; border-radius: 16px; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
+        .doc-header { border-bottom: 3px double var(--border); padding-bottom: 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .header-title h1 { font-size: 1.5rem; color: var(--primary-dark); font-weight: 800; text-transform: uppercase; }
+        .header-title h2 { font-size: 1.1rem; color: var(--text); font-weight: 600; margin-top: 0.25rem; }
+        .badge-meeting { background: var(--primary); color: #fff; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; text-align: center; }
+        .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: var(--card-bg); padding: 1.25rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid var(--border); }
+        .meta-item span { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+        .meta-item strong { font-size: 0.95rem; color: var(--text); }
+        h2.section-title { font-size: 1.25rem; color: var(--primary-dark); border-left: 5px solid var(--primary); padding-left: 0.75rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 700; }
+        h3.step-title { font-size: 1.05rem; color: #0f172a; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+        p, ul, ol { margin-bottom: 1rem; font-size: 0.95rem; }
+        ul, ol { padding-left: 1.5rem; }
+        li { margin-bottom: 0.35rem; }
+        pre { background: var(--code-bg); color: #e2e8f0; padding: 1rem 1.25rem; border-radius: 10px; overflow-x: auto; font-family: 'Fira Code', monospace; font-size: 0.82rem; line-height: 1.5; margin: 0.75rem 0 1.25rem; }
+        code { font-family: 'Fira Code', monospace; background: #e2e8f0; color: #0f172a; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        .callout { background: var(--primary-light); border-left: 4px solid var(--primary); padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; font-size: 0.92rem; }
+        .callout strong { color: var(--primary-dark); }
+        table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.9rem; }
+        th, td { border: 1px solid var(--border); padding: 0.75rem 1rem; text-align: left; }
+        th { background: var(--card-bg); font-weight: 700; }
+        tr:nth-child(even) { background-color: #fafafa; }
+        .lks-card { border: 2px dashed var(--border); padding: 1.5rem; border-radius: 12px; background: #fff; margin-top: 1.5rem; }
+        @media print { body { background: #fff; padding: 0; } .container { box-shadow: none; padding: 0; max-width: 100%; } .page-break { page-break-before: always; } }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="doc-header">
+        <div class="header-title">
+            <h1>Modul Ajar Praktikum</h1>
+            <h2>Pemrograman Web & Perangkat Bergerak (PWPB)</h2>
+        </div>
+        <div class="badge-meeting">PERTEMUAN 06<br><small style="font-weight:400;opacity:0.9;">12 Pertemuan Total</small></div>
+    </div>
+
+    <div class="meta-grid">
+        <div class="meta-item"><span>Mata Pelajaran</span><strong>Pemrograman Backend</strong></div>
+        <div class="meta-item"><span>Topik Bahasan</span><strong>CRUD Lengkap: Modul Proyek</strong></div>
+        <div class="meta-item"><span>Pola Arsitektur</span><strong>MVC (Model-View-Controller)</strong></div>
+        <div class="meta-item"><span>Sasaran</span><strong>Kelas XI / XII RPL</strong></div>
+    </div>
+
+    <h2 class="section-title">A. Tujuan Pembelajaran</h2>
+    <ul>
+        <li>Siswa dapat menerapkan fungsionalitas CRUD (Create, Read, Update, Delete) secara utuh dalam arsitektur MVC.</li>
+        <li>Siswa mampu membuat file <strong>Model</strong> dan <strong>Controller</strong> untuk menangani 5 tipe eksekusi: GET ALL, GET BY ID, INSERT, UPDATE, dan DELETE.</li>
+        <li>Siswa mampu mendaftarkan <strong>Routes</strong> dengan parameter dinamis (<code>/:id</code>) untuk method GET, PUT, dan DELETE.</li>
+        <li>Siswa melakukan pengujian end-to-end API menggunakan Postman atau Thunder Client.</li>
+    </ul>
+
+    <h2 class="section-title">B. Landasan Teori Singkat</h2>
+    <p>Pada modul profil sebelumnya, kita hanya menggunakan dua buah operasi (GET dan PUT) karena hanya ada satu baris profil (satu pemilik). Untuk data portofolio/proyek, kita butuh lima jalur utama (Full CRUD):</p>
+    <ul>
+        <li><strong>CREATE (POST)</strong>: Tambah data baru.</li>
+        <li><strong>READ (GET)</strong>: Tampilkan semua data, atau per-ID tertentu.</li>
+        <li><strong>UPDATE (PUT)</strong>: Ubah data berdasarkan ID.</li>
+        <li><strong>DELETE (DELETE)</strong>: Hapus data berdasarkan ID.</li>
+    </ul>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">C. Langkah Kerja Praktikum</h2>
+
+    <h3 class="step-title">Langkah 1: Membuat Model Proyek (<code>models/projectModel.js</code>)</h3>
+    <pre><code>const db = require('../config/db');
+
+// 1. GET ALL
+const getAllProjects = async () => {
+    const [rows] = await db.query('SELECT * FROM projects ORDER BY created_at DESC');
+    return rows;
+};
+
+// 2. GET BY ID
+const getProjectById = async (id) => {
+    const [rows] = await db.query('SELECT * FROM projects WHERE id = ?', [id]);
+    return rows[0];
+};
+
+// 3. CREATE
+const createProject = async (data) => {
+    const { title, description, category, image_url, demo_url, github_url, tech_stack, is_featured } = data;
+    const [result] = await db.query(
+        `INSERT INTO projects (title, description, category, image_url, demo_url, github_url, tech_stack, is_featured)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        [title, description, category, image_url, demo_url, github_url, tech_stack, is_featured || false]
+    );
+    return result; 
+};
+
+// 4. UPDATE
+const updateProject = async (id, data) => {
+    const { title, description, category, image_url, demo_url, github_url, tech_stack, is_featured } = data;
+    const [result] = await db.query(
+        `UPDATE projects SET 
+            title = ?, description = ?, category = ?, 
+            image_url = ?, demo_url = ?, github_url = ?, 
+            tech_stack = ?, is_featured = ?
+        WHERE id = ?`,
+        [title, description, category, image_url, demo_url, github_url, tech_stack, is_featured, id]
+    );
+    return result;
+};
+
+// 5. DELETE
+const deleteProject = async (id) => {
+    const [result] = await db.query('DELETE FROM projects WHERE id = ?', [id]);
+    return result;
+};
+
+module.exports = { getAllProjects, getProjectById, createProject, updateProject, deleteProject };</code></pre>
+
+    <h3 class="step-title">Langkah 2: Membuat Controller Proyek (<code>controller/projectController.js</code>)</h3>
+    <pre><code>const projectModel = require('../models/projectModel');
+
+// GET ALL
+const getAllProjects = async (req, res) => {
+    try {
+        const projects = await projectModel.getAllProjects();
+        res.status(200).json({ success: true, total: projects.length, data: projects });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+};
+
+// GET BY ID
+const getProjectById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const project = await projectModel.getProjectById(id);
+        if (!project) return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        res.status(200).json({ success: true, data: project });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+};
+
+// CREATE
+const createProject = async (req, res) => {
+    try {
+        const data = req.body;
+        if (!data.title) return res.status(400).json({ success: false, message: 'Title wajib diisi' });
+        const result = await projectModel.createProject(data);
+        res.status(201).json({ success: true, data: { id: result.insertId } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+};
+
+// UPDATE
+const updateProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        if (!data.title) return res.status(400).json({ success: false, message: 'Title wajib diisi' });
+        const result = await projectModel.updateProject(id, data);
+        if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        res.status(200).json({ success: true, message: 'Data diperbarui' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+};
+
+// DELETE
+const deleteProject = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await projectModel.deleteProject(id);
+        if (result.affectedRows === 0) return res.status(404).json({ success: false, message: 'Data tidak ditemukan' });
+        res.status(200).json({ success: true, message: 'Data dihapus' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    }
+};
+
+module.exports = { getAllProjects, getProjectById, createProject, updateProject, deleteProject };</code></pre>
+
+    <h3 class="step-title">Langkah 3: Membuat Routes Proyek (<code>routes/projectRoutes.js</code>)</h3>
+    <pre><code>const express = require('express');
+const router = express.Router();
+const projectController = require('../controller/projectController');
+
+// 5 Route CRUD
+router.get('/', projectController.getAllProjects);
+router.get('/:id', projectController.getProjectById);
+router.post('/', projectController.createProject);
+router.put('/:id', projectController.updateProject);
+router.delete('/:id', projectController.deleteProject);
+
+module.exports = router;</code></pre>
+
+    <h3 class="step-title">Langkah 4: Mendaftarkan Route di <code>server.js</code></h3>
+    <pre><code>const profileRoutes = require('./routes/profileRoutes');
+const projectRoutes = require('./routes/projectRoutes'); // BARU
+
+app.use('/api/profile', profileRoutes);
+app.use('/api/projects', projectRoutes); // BARU</code></pre>
+
+    <div class="page-break"></div>
+
+    <h2 class="section-title">D. Lembar Kerja Siswa (LKS)</h2>
+    <div class="lks-card">
+        <div style="display:flex;gap:2rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:0.75rem;">
+            <div><strong>Nama Siswa:</strong> ............................................................</div>
+            <div><strong>Kelas:</strong> XI RPL 1</div>
+        </div>
+        <ol>
+            <li style="margin-bottom:1rem;"><strong>Tugas Praktik (POST):</strong> Gunakan method <code>POST</code> di Postman untuk menambahkan portofolio hasil karya kalian sendiri (misal: "Web Perpustakaan"). Lampirkan screenshot respon suksesnya!</li>
+            <li style="margin-bottom:1rem;"><strong>Tugas Praktik (DELETE):</strong> Gunakan method <code>DELETE</code> untuk menghapus proyek uji coba, lalu buktikan bahwa ID tersebut sudah terhapus dengan mencoba method <code>GET</code> berdasar ID tersebut!</li>
+            <li><strong>Tugas Analisis:</strong> Saat kita menambah (POST) proyek baru, kita tidak menyertakan kolom <code>id</code>. Namun, proyek tersebut secara otomatis tersimpan dengan ID unik berurutan. Apa fitur MySQL (di pertemuan 3) yang menangani penomoran otomatis ini?</li>
+        </ol>
+    </div>
+
+</div>
+</body>
+</html>
