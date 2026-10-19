@@ -6,6 +6,6 @@ const profileController = require('../controller/profileController');
 router.get('/', profileController.getProfile);
 
 // PUT /api/profile/:id - Memperbarui data profil berdasarkan ID
-router.put('/:id', profileController.updateProfile);
-
+router.put('/:id', profileController.updateProfile)
+;
 module.exports = router;
