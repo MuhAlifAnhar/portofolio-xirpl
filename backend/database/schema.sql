@@ -88,6 +88,20 @@ CREATE TABLE IF NOT EXISTS messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 8. Tabel Certificates (Sertifikasi & Penghargaan)
+CREATE TABLE IF NOT EXISTS certificates (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    issuer VARCHAR(100) NOT NULL,
+    issue_date DATE NOT NULL,
+    expiration_date DATE NULL,
+    credential_id VARCHAR(100) NULL,
+    credential_url VARCHAR(255) NULL,
+    description TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- =====================================================
 -- DATA DUMMY AWAL (SEEDING DATA UNTUK PENGUJIAN)
 -- =====================================================
@@ -144,3 +158,25 @@ INSERT INTO experiences (type, title, company, location, start_date, is_current,
     TRUE,
     'Mempelajari dasar pemrograman, algoritma, database relasional MySQL, dan pengembangan web fullstack.'
 );
+
+-- Dummy Data Certificates
+INSERT INTO certificates (name, issuer, issue_date, expiration_date, credential_id, credential_url, description) VALUES 
+(
+    'Belajar Dasar Pemrograman JavaScript', 
+    'Dicoding Indonesia', 
+    '2024-05-10', 
+    '2027-05-10', 
+    'DICODING-JS-12345', 
+    'https://www.dicoding.com/certificates/DICODING-JS-12345', 
+    'Sertifikasi pemahaman dasar JavaScript ES6+, asynchronous programming, dan manipulasi objek.'
+),
+(
+    'Junior Web Developer Certification', 
+    'BNSP Indonesia', 
+    '2024-08-20', 
+    NULL, 
+    'BNSP-JWD-98765', 
+    'https://bnsp.go.id/verify/98765', 
+    'Sertifikasi kompetensi keahlian web development berstandar SKKNI.'
+);
+
