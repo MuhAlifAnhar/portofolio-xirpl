@@ -102,6 +102,19 @@ CREATE TABLE IF NOT EXISTS certificates (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- 9. Tabel Testimonials (Ulasan / Testimoni Klien atau Rekan Kerja)
+CREATE TABLE IF NOT EXISTS testimonials (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    company VARCHAR(100) NULL,
+    message TEXT NOT NULL,
+    avatar_url VARCHAR(255) NULL,
+    rating INT DEFAULT 5,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 -- =====================================================
 -- DATA DUMMY AWAL (SEEDING DATA UNTUK PENGUJIAN)
 -- =====================================================
@@ -179,4 +192,22 @@ INSERT INTO certificates (name, issuer, issue_date, expiration_date, credential_
     'https://bnsp.go.id/verify/98765', 
     'Sertifikasi kompetensi keahlian web development berstandar SKKNI.'
 );
+
+-- Dummy Data Testimonials
+INSERT INTO testimonials (name, role, company, message, rating) VALUES 
+(
+    'Budi Santoso',
+    'Senior Project Manager',
+    'PT Inovasi Digital Nusantara',
+    'Kerja sama yang luar biasa! Hasil pembuatan REST API sangat rapi, terstruktur sesuai standar industri, dan selesai tepat waktu.',
+    5
+),
+(
+    'Siti Rahmawati',
+    'Lead UI/UX Designer',
+    'Creative Studio ID',
+    'Sangat komunikatif dalam mengintegrasikan desain menjadi tampilan web responsif. Sangat direkomendasikan untuk proyek web development!',
+    5
+);
+
 
